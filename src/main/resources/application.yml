@@ -1,4 +1,6 @@
 server:
   port: 8088
 
-
+logging: #logging 대상 적용
+  level:
+    org.springframework: DEBUG  #logging 메시지를 DEBUG 모드로 출력
