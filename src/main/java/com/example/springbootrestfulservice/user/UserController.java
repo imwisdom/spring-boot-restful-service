@@ -22,7 +22,13 @@ public class UserController {
     //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
     @GetMapping("/users/{id}")
     public User retrieveUser(@PathVariable int id){
-        return service.findOne(id);
+        User user = service.findOne(id);
+
+        if(user == null){
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+        //500 internal server error
+        return user;
     }
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user){
