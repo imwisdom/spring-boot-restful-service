@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@Service    //@Component도 되는데 어떠한 용도로 사용될 것인지 정확히 Service로 명시
 public class UserDaoService {
     private static List<User> users = new ArrayList();
     private static int usersCount = 3;
