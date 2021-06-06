@@ -1,4 +1,4 @@
-package com.example.springbootrestfulservice;
+package com.example.springbootrestfulservice.helloworld;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

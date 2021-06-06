@@ -1,5 +1,4 @@
-package com.example.springbootrestfulservice;
-
+package com.example.springbootrestfulservice.helloworld;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +25,5 @@ public class HelloWorldController {
         //{name}의 name과 String name(매개변수 이름)은 같은 이름을 가져야됨
         return new HelloWorldBean(String.format("Hello World, %s", name));
     }
-
 
 }
