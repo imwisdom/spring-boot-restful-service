@@ -1,5 +1,7 @@
 package com.example.springbootrestfulservice.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -7,10 +9,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class UserController {
     private UserDaoService service;
+
+    @Autowired
+    private MessageSource messageSource;    //같은 type에 있는 bean을 자동 주입
 
     public UserController(UserDaoService service){
         this.service = service;
@@ -48,6 +54,10 @@ public class UserController {
         if(user == null){
             throw new UserNotFoundException(String.format("ID[%s] not found", id));
         }
+    }
+    @GetMapping(path = "/hello-world-internationalized")
+    public String helloWorldInternationalized(@RequestHeader(name="Accept-Language", required = false) Locale locale){
+        return messageSource.getMessage("greeting.message", null, locale);
     }
 
 }
