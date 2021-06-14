@@ -1,5 +1,7 @@
 package com.example.springbootrestfulservice.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,6 +11,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@JsonIgnoreProperties(value={"password"})//ignore하고 싶은 필드 이름을 적음
 public class User {
     private Integer id;
 
@@ -16,4 +19,9 @@ public class User {
     private String name;
     @Past   //현재 날짜보다 과거만 가능
     private Date joinDate;
+
+    //@JsonIgnore //client에게 보여지는 json 값을 안보이도록 지정
+    private String password;
+    //@JsonIgnore
+    private String ssn;     //주민번호
 }
