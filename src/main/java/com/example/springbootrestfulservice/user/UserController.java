@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class UserController {
         //500 internal server error
         return user;
     }
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    @PostMapping("/users") // if invalid -> 400 bad request
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
         User savedUser = service.save(user);
         //사용자에게 요청값을 변환해주기 위한 코드
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
