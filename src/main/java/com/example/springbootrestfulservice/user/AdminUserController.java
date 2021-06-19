@@ -65,7 +65,10 @@ public class AdminUserController {
 //    }
     // ex) GET /admin/users/1 -> /admin/v1/users/1
     //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
-    @GetMapping("/v1/users/{id}")   //version 1.0
+    //@GetMapping("/v1/users/{id}")   //version 1.0
+    //@GetMapping(value = "/users/{id}/", params = "version=1")   //http://localhost:8088/admin/users/1/?version=1
+    //@GetMapping(value = "/users/{id}", headers = "X-API-VERSION=1") //header key = X-API-VERSION, value = 1
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv1+json") //mime-type, header key = Accept value = application/vnd~~
     public MappingJacksonValue retrieveUserV1(@PathVariable int id){
         User user = service.findOne(id);
 
@@ -82,7 +85,10 @@ public class AdminUserController {
         mapping.setFilters(filters);
         return mapping;
     }
-    @GetMapping("/v2/users/{id}")   //version 2.0
+    //@GetMapping("/v2/users/{id}")   //version 2.0
+    //@GetMapping(value = "/users/{id}/", params = "version=2")   //version 2.0
+    //@GetMapping(value = "/users/{id}", headers = "X-API-VERSION=2")
+    @GetMapping(value = "/users/{id}", produces = "application/vnd.company.appv2+json")
     public MappingJacksonValue retrieveUserV2(@PathVariable int id){
         User user = service.findOne(id);
 
