@@ -27,10 +27,22 @@ public class AdminUserController {
         this.service = service;
     }
 
+//    @GetMapping("/users")
+//    public List<User> retrieveAllUsers(){
+//        return service.findAll();
+//    }
     @GetMapping("/users")
-    public List<User> retrieveAllUsers(){
-        return service.findAll();
+    public MappingJacksonValue retrieveAllUsers(){
+        List<User> users = service.findAll();
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter
+                .filterOutAllExcept("id", "name", "joinDate", "password");
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+        MappingJacksonValue mapping = new MappingJacksonValue(users);
+        mapping.setFilters(filters);
+        return mapping;
     }
+
     // ex) GET /users/1
     //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
     @GetMapping("/users/{id}")

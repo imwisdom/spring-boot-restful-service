@@ -1,8 +1,12 @@
 package com.example.springbootrestfulservice.user;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,8 +27,10 @@ public class UserController {
     }
     @GetMapping("/users")
     public List<User> retrieveAllUsers(){
-        return service.findAll();
+        List<User> user = service.findAll();
+        return user;
     }
+
     // ex) GET /users/1
     //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
     @GetMapping("/users/{id}")
