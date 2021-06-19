@@ -3,6 +3,7 @@ package com.example.springbootrestfulservice.user;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +44,29 @@ public class AdminUserController {
         return mapping;
     }
 
-    // ex) GET /users/1
+//    // ex) GET /users/1
+//    //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
+//    @GetMapping("/users/{id}")
+//    public MappingJacksonValue retrieveUser(@PathVariable int id){
+//        User user = service.findOne(id);
+//
+//        if(user == null){
+//            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+//        }
+//        //500 internal server error
+//
+//        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter
+//                .filterOutAllExcept("id", "name", "password", "ssn");
+//        //User 클래스에서 @JsonFilter("UserInfo")의 "UserInfo"가 filter의 id가 됨
+//        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
+//        MappingJacksonValue mapping = new MappingJacksonValue(user);
+//        mapping.setFilters(filters);
+//        return mapping;
+//    }
+    // ex) GET /admin/users/1 -> /admin/v1/users/1
     //path variable의 type을 지정한 것에 따라 id가 자동적으로 type에 맞게 매핑
-    @GetMapping("/users/{id}")
-    public MappingJacksonValue retrieveUser(@PathVariable int id){
+    @GetMapping("/v1/users/{id}")   //version 1.0
+    public MappingJacksonValue retrieveUserV1(@PathVariable int id){
         User user = service.findOne(id);
 
         if(user == null){
@@ -59,6 +79,28 @@ public class AdminUserController {
         //User 클래스에서 @JsonFilter("UserInfo")의 "UserInfo"가 filter의 id가 됨
         FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfo", filter);
         MappingJacksonValue mapping = new MappingJacksonValue(user);
+        mapping.setFilters(filters);
+        return mapping;
+    }
+    @GetMapping("/v2/users/{id}")   //version 2.0
+    public MappingJacksonValue retrieveUserV2(@PathVariable int id){
+        User user = service.findOne(id);
+
+        if(user == null){
+            throw new UserNotFoundException(String.format("ID[%s] not found", id));
+        }
+        //500 internal server error
+
+        //User -> User2
+        UserV2 userV2 = new UserV2();
+        BeanUtils.copyProperties(user, userV2); //두 인스턴스 간의 공통적인 필드가 있으면 그 값을 copy
+        userV2.setGrade("VIP");
+
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter
+                .filterOutAllExcept("id", "name", "joinDate", "grade");
+        //User 클래스에서 @JsonFilter("UserInfo")의 "UserInfo"가 filter의 id가 됨
+        FilterProvider filters = new SimpleFilterProvider().addFilter("UserInfoV2", filter);
+        MappingJacksonValue mapping = new MappingJacksonValue(userV2);
         mapping.setFilters(filters);
         return mapping;
     }
